@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hamza Imran | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0a0a;
+            --color-text: #f0f0f0;
+            --color-text-muted: #888888;
+            --color-accent: #007aff;
+            --color-border: #222222;
+            --glow-color: rgba(0, 122, 255, 0.35);
+            --ease-spring: cubic-bezier(0.3, 1.2, 0.8, 1.0);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            /* The background is rendered by the Three.js canvas */
+            color: var(--color-text);
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Hide native cursor for a custom experience */
+        body, a, button {
+            cursor: none;
+        }
+
+        .bg-noise::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+DQogIDxmaWx0ZXIgaWQ9Im4iPg0KICAgIDxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIuOCIgbnVtT2N0YXZlcz0iNSIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPg0KICA8L2ZpbHRlcj4NCiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIwLjAzIi8+DQo8L3N2Zz4=');
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        .text-glow {
+            transition: text-shadow 0.3s ease;
+        }
+        
+        .text-glow:hover {
+            text-shadow: 0 0 8px var(--glow-color), 0 0 20px rgba(0, 122, 255, 0.2);
+        }
+
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .experience-card {
+            background-color: #111;
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            left: var(--mouse-x, -100%);
+            top: var(--mouse-y, -100%);
+            width: 200px;
+            height: 200px;
+            background-image: radial-gradient(circle, var(--glow-color) 0%, transparent 80%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .experience-card:hover::before {
+            opacity: 1;
+        }
+        
+        .experience-card:hover {
+            border-color: rgba(0, 122, 255, 0.3);
+            box-shadow: 0 0 30px rgba(0, 122, 255, 0.1);
+        }
+        
+        .experience-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .interactive-glow {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .interactive-glow::before {
+            content: '';
+            position: absolute;
+            left: var(--mouse-x, -50%);
+            top: var(--mouse-y, -50%);
+            width: 150px;
+            height: 150px;
+            background-image: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .interactive-glow:hover::before {
+            opacity: 1;
+        }
+
+        .interactive-glow:hover {
+            box-shadow: 0 0 20px rgba(0, 122, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        main {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Shiny Button Styles --- */
+        @property --gradient-angle {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @property --gradient-angle-offset {
+          syntax: "<angle>";
+          initial-value: 0deg;
+          inherits: false;
+        }
+
+        @property --gradient-percent {
+          syntax: "<percentage>";
+          initial-value: 5%;
+          inherits: false;
+        }
+
+        @property --gradient-shine {
+          syntax: "<color>";
+          initial-value: white;
+          inherits: false;
+        }
+
+        .shiny-cta {
+          --shiny-cta-bg: var(--color-bg);
+          --shiny-cta-bg-subtle: #1a1818;
+          --shiny-cta-fg: var(--color-text);
+          --shiny-cta-highlight: var(--color-accent);
+          --shiny-cta-highlight-subtle: var(--glow-color);
+          --animation: gradient-angle linear infinite;
+          --duration: 3s;
+          --shadow-size: 2px;
+          --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+          
+          isolation: isolate;
+          position: relative;
+          overflow: hidden;
+          outline-offset: 4px;
+          padding: 1rem 2rem;
+          font-family: "Inter", sans-serif;
+          font-size: 1rem;
+          line-height: 1.2;
+          font-weight: 500;
+          border: 1px solid transparent;
+          border-radius: 360px;
+          color: var(--shiny-cta-fg);
+          background: linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+            conic-gradient(
+              from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+              transparent,
+              var(--shiny-cta-highlight) var(--gradient-percent),
+              var(--gradient-shine) calc(var(--gradient-percent) * 2),
+              var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+              transparent calc(var(--gradient-percent) * 4)
+            ) border-box;
+          box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+          transition: var(--transition);
+          transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+          text-decoration: none;
+          display: inline-block;
+          text-align: center;
+        }
+
+        .shiny-cta::before,
+        .shiny-cta::after,
+        .shiny-cta span::before {
+          content: "";
+          pointer-events: none;
+          position: absolute;
+          inset-inline-start: 50%;
+          inset-block-start: 50%;
+          translate: -50% -50%;
+          z-index: -1;
+        }
+
+        .shiny-cta:active {
+          translate: 0 1px;
+        }
+
+        .shiny-cta::before {
+          --size: calc(100% - var(--shadow-size) * 3);
+          --position: 2px;
+          --space: calc(var(--position) * 2);
+          width: var(--size);
+          height: var(--size);
+          background: radial-gradient(
+            circle at var(--position) var(--position),
+            white calc(var(--position) / 4),
+            transparent 0
+          ) padding-box;
+          background-size: var(--space) var(--space);
+          background-repeat: space;
+          mask-image: conic-gradient(
+            from calc(var(--gradient-angle) + 45deg),
+            black,
+            transparent 10% 90%,
+            black
+          );
+          border-radius: inherit;
+          opacity: 0.4;
+          z-index: -1;
+        }
+
+        .shiny-cta::after {
+          --animation: shimmer linear infinite;
+          width: 100%;
+          aspect-ratio: 1;
+          background: linear-gradient(
+            -50deg,
+            transparent,
+            var(--shiny-cta-highlight),
+            transparent
+          );
+          mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+          opacity: 0.6;
+        }
+
+        .shiny-cta span {
+          z-index: 1;
+        }
+
+        .shiny-cta span::before {
+          --size: calc(100% + 1rem);
+          width: var(--size);
+          height: var(--size);
+          box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+          opacity: 0;
+          transition: opacity var(--transition);
+          animation: calc(var(--duration) * 1.5) breathe linear infinite;
+        }
+
+        .shiny-cta,
+        .shiny-cta::before,
+        .shiny-cta::after {
+          animation: var(--animation) var(--duration),
+            var(--animation) calc(var(--duration) / 0.4) reverse paused;
+          animation-composition: add;
+        }
+
+        .shiny-cta:is(:hover, :focus-visible) {
+          --gradient-percent: 20%;
+          --gradient-angle-offset: 95deg;
+          --gradient-shine: var(--shiny-cta-highlight-subtle);
+        }
+
+        .shiny-cta:is(:hover, :focus-visible),
+        .shiny-cta:is(:hover, :focus-visible)::before,
+        .shiny-cta:is(:hover, :focus-visible)::after {
+          animation-play-state: running;
+        }
+
+        .shiny-cta:is(:hover, :focus-visible) span::before {
+          opacity: 1;
+        }
+        
+        /* --- Animated Text --- */
+        .animated-heading {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        .animated-heading span {
+            display: inline-block; /* For transform to work */
+            animation: breath var(--duration, 1.5s) alternate cubic-bezier(0.37, 0, 0.63, 1) infinite;
+            animation-fill-mode: both;
+        }
+
+        /* --- Tubelight Nav --- */
+        #tubelight-nav {
+            top: 1.5rem; /* 24px */
+            transition: top 0.3s ease, bottom 0.3s ease;
+        }
+
+        .nav-item {
+            position: relative;
+            z-index: 1; /* Above the lamp */
+            transition: color 0.3s ease;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+        }
+
+        .nav-item:hover {
+            color: var(--color-text);
+        }
+        
+        #nav-lamp {
+            opacity: 0;
+            pointer-events: none;
+            transition: left 0.5s var(--ease-spring), width 0.5s var(--ease-spring), opacity 0.3s ease;
+        }
+
+        /* --- Custom Cursor --- */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 21px;
+            height: 23px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            transform-origin: 0 0;
+        }
+
+        #custom-cursor.invert-cursor {
+            mix-blend-mode: difference;
+        }
+
+        /* --- Carousel Styles --- */
+        #carousel-track {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .carousel-control-button {
+            background-color: #2e2e48;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .carousel-control-button:hover {
+            background-color: #3a3a5c;
+            transform: scale(1.05);
+        }
+        
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background-color: var(--color-text-muted);
+            opacity: 0.4;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background-color: var(--color-accent);
+            opacity: 1;
+            width: 24px;
+        }
+
+        /* --- Pricing Section --- */
+        .glassmorphism-card {
+            background-color: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glassmorphism-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 122, 255, 0.4);
+        }
+
+        .popular-card {
+            transform: scale(1.05);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 40px var(--glow-color);
+        }
+        
+        .popular-card:hover {
+             transform: scale(1.08) translateY(-8px);
+        }
+
+        .popular-badge {
+            background-color: var(--color-accent);
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .pricing-button {
+            background-color: rgba(34, 34, 34, 0.5);
+            border: 1px solid var(--color-border);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .pricing-button:hover {
+             background-color: rgba(45, 45, 45, 0.7);
+        }
+
+        .pricing-button.primary {
+            background-color: var(--color-accent);
+            border-color: transparent;
+            box-shadow: 0 0 20px var(--glow-color);
+        }
+
+        .pricing-button.primary:hover {
+            background-color: #0088ff;
+        }
+        
+        /* Responsive: move nav to bottom on mobile */
+        @media (max-width: 767px) {
+            #tubelight-nav {
+                top: auto;
+                bottom: 1.5rem;
+            }
+            main {
+              padding-bottom: 5rem; /* Add space for the bottom nav */
+            }
+        }
+
+
+        @keyframes breath {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.03);
+            }
+        }
+
+        @keyframes gradient-angle {
+          to {
+            --gradient-angle: 360deg;
+          }
+        }
+
+        @keyframes shimmer {
+          to {
+            rotate: 360deg;
+          }
+        }
+
+        @keyframes breathe {
+          from, to {
+            scale: 1;
+          }
+          50% {
+            scale: 1.2;
+          }
+        }
+    </style>
+</head>
+<body class="bg-noise">
+    <div id="custom-cursor">
+        <svg viewBox="0 0 21 23" version="1.1" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+            <path d="M0 0l20 12-7 3-3 7z" fill="#ffffff" stroke="#000000" stroke-width="1.5"></path>
+        </svg>
+    </div>
+    <div id="hero-canvas-container"></div>
+    <!-- Header & Navigation -->
+    <nav id="tubelight-nav" class="fixed left-1/2 -translate-x-1/2 z-50">
+        <div class="relative flex items-center gap-1 md:gap-2 bg-black/30 border border-[var(--color-border)] backdrop-blur-lg p-1 rounded-full shadow-lg">
+             <div id="nav-lamp" class="absolute h-[calc(100%-0.5rem)] top-1 -z-10">
+                <div class="absolute inset-0 bg-[#222222] rounded-full"></div>
+                <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-[var(--color-accent)] rounded-t-full">
+                    <div class="absolute w-12 h-6 bg-[var(--glow-color)] rounded-full blur-md -top-2 -left-2"></div>
+                    <div class="absolute w-8 h-6 bg-[var(--glow-color)] rounded-full blur-md -top-1"></div>
+                    <div class="absolute w-4 h-4 bg-[var(--glow-color)] rounded-full blur-sm top-0 left-2"></div>
+                </div>
+            </div>
+            <a href="#home" data-section="home" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Home</a>
+            <a href="#about" data-section="about" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">About</a>
+            <a href="#past-work" data-section="past-work" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Past Work</a>
+            <a href="#experience" data-section="experience" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Experience</a>
+            <a href="#education" data-section="education" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Education</a>
+            <a href="#pricing" data-section="pricing" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Pricing</a>
+            <a href="#contact" data-section="contact" class="nav-item px-3 py-2 md:px-4 rounded-full text-sm font-medium">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Section: Hero (#home) -->
+        <section id="home" class="h-screen flex items-center justify-center overflow-hidden">
+            <div class="text-center z-10 p-4">
+                <h1 class="text-6xl md:text-8xl font-bold mb-4 text-glow animated-heading" data-max-weight="800">Hamza Imran</h1>
+                <p class="text-xl md:text-2xl text-[var(--color-text-muted)] mb-8 max-w-2xl mx-auto">
+                   Photography & Videography expertise
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#experience" class="shiny-cta">
+                        <span>View My Work</span>
+                    </a>
+                    <a href="#about" class="shiny-cta">
+                        <span>About Me</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: About (#about) -->
+        <section id="about" class="py-20 md:py-32 flex items-center justify-center relative">
+            <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">About Me</h2>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                </div>
+                <div class="grid md:grid-cols-5 gap-12 items-start">
+                    <div class="md:col-span-3 scroll-animate">
+                        <div class="bg-[#111] p-6 rounded-lg border border-[var(--color-border)]">
+                            <p class="text-lg text-[var(--color-text-muted)] leading-relaxed">
+                                I'm a freshman university student passionate about blending technology and creative storytelling. From design at 1080Frames and event photography at THEMUNTIMES, to editorial and product photography, I thrive on crafting narratives that resonate. My technical journey is just as diverse, with skills in Python, community engagement, and a keen eye for security awareness. I'm driven by curiosity and the constant pursuit of knowledge, always looking for the next challenge to tackle and the next story to tell.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-8 scroll-animate" style="transition-delay: 200ms;">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">Top Skills</h3>
+                            <ul class="space-y-2">
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Security Awareness</li>
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Community Engagement</li>
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Research Skills</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4">Certifications</h3>
+                            <ul class="space-y-2 text-sm text-[var(--color-text-muted)]">
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Personal Productivity by Google</li>
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Python Essentials 1 by Cisco</li>
+                                <li class="bg-[#111] p-3 rounded-md border border-[var(--color-border)]">Digital Tools for Collaboration by Google</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Past Work (#past-work) -->
+        <section id="past-work" class="py-20 md:py-32">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">Past Work</h2>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                </div>
+                <div class="w-full max-w-3xl mx-auto scroll-animate">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-2">
+                            <button id="carousel-prev" class="carousel-control-button" aria-label="Previous slide">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <button id="carousel-next" class="carousel-control-button" aria-label="Next slide">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                        <button id="carousel-play-pause" class="carousel-control-button" aria-label="Pause autoplay">
+                            <!-- Icon will be injected by JS -->
+                        </button>
+                    </div>
+
+                    <div id="carousel-container" class="relative overflow-hidden rounded-lg border border-[var(--color-border)] shadow-lg shadow-black/20 aspect-[4/3]">
+                        <div id="carousel-track" class="flex h-full">
+                            <!-- Slides will be injected by JS -->
+                        </div>
+                    </div>
+                    
+                    <div id="carousel-dots" class="flex justify-center items-center mt-4 gap-2">
+                        <!-- Dots will be injected by JS -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section: Experience (#experience) -->
+        <section id="experience" class="py-20 md:py-32">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">Experience</h2>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                </div>
+                <div id="experience-list" class="space-y-8">
+                    <!-- Experience items will be injected here by JS, but placed here for SSR/no-JS -->
+                    <div class="grid md:grid-cols-[1fr_3fr] gap-8 experience-card scroll-animate p-6">
+                        <div class="text-left md:text-right">
+                            <h4 class="font-bold text-lg text-[var(--color-text-muted)]">September 2025 - Present</h4>
+                            <p class="text-sm text-[var(--color-accent)] font-medium">Effat University</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Vice President, Effat Culture And Language Club</h3>
+                            <p class="mt-2 text-[var(--color-text-muted)]">Vice-President of the Culture and Language Club at Effat, I am a part of every core activity from planning to execution, ensuring smooth operations and fostering a vibrant community.</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-[1fr_3fr] gap-8 experience-card scroll-animate p-6">
+                        <div class="text-left md:text-right">
+                            <h4 class="font-bold text-lg text-[var(--color-text-muted)]">September 2025 - Present</h4>
+                            <p class="text-sm text-[var(--color-accent)] font-medium">IEOM Society International</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Aquatherm - R&D and Media Core Member</h3>
+                            <p class="mt-2 text-[var(--color-text-muted)]">Working as a core member of the team, helping out with the research and development, and also helping with the media and marketing of the project.</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-[1fr_3fr] gap-8 experience-card scroll-animate p-6">
+                        <div class="text-left md:text-right">
+                            <h4 class="font-bold text-lg text-[var(--color-text-muted)]">June 2024 - September 2024</h4>
+                            <p class="text-sm text-[var(--color-accent)] font-medium">Toyland</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Product Photographer</h3>
+                            <p class="mt-2 text-[var(--color-text-muted)]">I worked as a complete product photographer, a total of over 5000 photos were photographed, edited, and uploaded to the website.</p>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-[1fr_3fr] gap-8 experience-card scroll-animate p-6">
+                         <div class="text-left md:text-right">
+                            <h4 class="font-bold text-lg text-[var(--color-text-muted)]">May 2024 - Present</h4>
+                            <p class="text-sm text-[var(--color-accent)] font-medium">1080Frames</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Lead Designer</h3>
+                            <p class="mt-2 text-[var(--color-text-muted)]">As the lead designer, I was in charge of all the design aspects of the company, from social media posts to the website design.</p>
+                        </div>
+                    </div>
+                     <div class="grid md:grid-cols-[1fr_3fr] gap-8 experience-card scroll-animate p-6">
+                         <div class="text-left md:text-right">
+                            <h4 class="font-bold text-lg text-[var(--color-text-muted)]">December 2023 - Present</h4>
+                            <p class="text-sm text-[var(--color-accent)] font-medium">THEMUNTIMES</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Photographer</h3>
+                            <p class="mt-2 text-[var(--color-text-muted)]">Working as an event photographer for THEMUNTIMES, South Asia's largest MUN publication.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Education (#education) -->
+        <section id="education" class="py-20 md:py-32">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">Education</h2>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                </div>
+                <div class="relative max-w-xl mx-auto pl-8">
+                    <!-- The timeline -->
+                    <div class="absolute left-0 top-2 bottom-2 w-0.5 bg-[var(--color-accent)] opacity-30"></div>
+        
+                    <div class="space-y-12">
+                        <!-- Timeline Item 1 -->
+                        <div class="relative scroll-animate">
+                            <!-- The dot -->
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 rounded-full bg-[var(--color-accent)] border-4 border-[var(--color-bg)] shadow-[0_0_10px_var(--glow-color)]"></div>
+                            
+                            <p class="font-mono text-sm text-[var(--color-text-muted)] tracking-wider">2025 &mdash; 2029</p>
+                            <h3 class="text-xl font-bold text-white mt-1">Effat University</h3>
+                            <p class="text-md text-[var(--color-text-muted)]">BSc, Computer Science</p>
+                        </div>
+        
+                        <!-- Timeline Item 2 -->
+                        <div class="relative scroll-animate" style="transition-delay: 150ms;">
+                            <!-- The dot -->
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 rounded-full bg-[var(--color-accent)] border-4 border-[var(--color-bg)] shadow-[0_0_10px_var(--glow-color)]"></div>
+                            
+                            <p class="font-mono text-sm text-[var(--color-text-muted)] tracking-wider">2022 &mdash; 2025</p>
+                            <h3 class="text-xl font-bold text-white mt-1">Pakistan International School Jeddah</h3>
+                            <p class="text-md text-[var(--color-text-muted)]">A-Levels - Math-Phy-CS</p>
+                        </div>
+        
+                        <!-- Timeline Item 3 -->
+                        <div class="relative scroll-animate" style="transition-delay: 300ms;">
+                            <!-- The dot -->
+                            <div class="absolute -left-10 top-1.5 w-4 h-4 rounded-full bg-[var(--color-accent)] border-4 border-[var(--color-bg)] shadow-[0_0_10px_var(--glow-color)]"></div>
+        
+                            <p class="font-mono text-sm text-[var(--color-text-muted)] tracking-wider">2020 &mdash; 2022</p>
+                            <h3 class="text-xl font-bold text-white mt-1">Pakistan International School Jeddah</h3>
+                            <p class="text-md text-[var(--color-text-muted)]">IGCSE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Pricing (#pricing) -->
+        <section id="pricing" class="py-20 md:py-32">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16 scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">Pricing</h2>
+                    <p class="mt-4 text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">Flexible plans for photography and videography services.</p>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                </div>
+                <div class="flex flex-col lg:flex-row gap-8 justify-center items-center">
+                    
+                    <!-- Basic Plan -->
+                    <div class="glassmorphism-card rounded-2xl p-8 w-full max-w-sm flex flex-col scroll-animate">
+                        <h3 class="text-2xl font-bold">Basic</h3>
+                        <p class="text-sm text-[var(--color-text-muted)] mt-2">Perfect for simple photoshoots.</p>
+                        <div class="my-6">
+                            <span class="text-5xl font-extrabold">150 SAR</span>
+                            <span class="text-lg text-[var(--color-text-muted)]">/session</span>
+                        </div>
+                        <ul class="space-y-3 text-left mb-8 flex-grow">
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>1 Hour Session</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>15 Edited Photos</span>
+                            </li>
+                             <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Online Gallery</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="pricing-button w-full text-center py-3 rounded-lg font-semibold">Choose Plan</a>
+                    </div>
+
+                    <!-- Standard Plan (Most Popular) -->
+                    <div class="glassmorphism-card popular-card rounded-2xl p-8 w-full max-w-sm flex flex-col relative scroll-animate" style="transition-delay: 150ms;">
+                        <div class="popular-badge absolute -top-4 right-6 px-4 py-1 text-sm font-semibold rounded-full text-white">
+                            Most Popular
+                        </div>
+                        <h3 class="text-2xl font-bold">Standard</h3>
+                        <p class="text-sm text-[var(--color-text-muted)] mt-2">Ideal for events and detailed projects.</p>
+                        <div class="my-6">
+                            <span class="text-5xl font-extrabold">350 SAR</span>
+                            <span class="text-lg text-[var(--color-text-muted)]">/event</span>
+                        </div>
+                         <ul class="space-y-3 text-left mb-8 flex-grow">
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Up to 4 Hours Coverage</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>50+ Edited Photos</span>
+                            </li>
+                             <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Online Gallery & Downloads</span>
+                            </li>
+                             <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Priority Editing</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="pricing-button primary w-full text-center py-3 rounded-lg font-semibold">Choose Plan</a>
+                    </div>
+                    
+                    <!-- Premium Plan -->
+                    <div class="glassmorphism-card rounded-2xl p-8 w-full max-w-sm flex flex-col scroll-animate" style="transition-delay: 300ms;">
+                        <h3 class="text-2xl font-bold">Premium</h3>
+                        <p class="text-sm text-[var(--color-text-muted)] mt-2">Comprehensive photo & video package.</p>
+                        <div class="my-6">
+                            <span class="text-5xl font-extrabold">700 SAR</span>
+                            <span class="text-lg text-[var(--color-text-muted)]">/project</span>
+                        </div>
+                        <ul class="space-y-3 text-left mb-8 flex-grow">
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>Full Day Coverage (8 hours)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>100+ Edited Photos</span>
+                            </li>
+                             <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>2-3 Minute Highlight Video</span>
+                            </li>
+                             <li class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span>All Raw Footage Provided</span>
+                            </li>
+                        </ul>
+                        <a href="#contact" class="pricing-button w-full text-center py-3 rounded-lg font-semibold">Choose Plan</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Contact (#contact) -->
+        <section id="contact" class="py-20 md:py-32">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <div class="scroll-animate">
+                    <h2 class="text-4xl md:text-5xl font-bold animated-heading">Get In Touch</h2>
+                    <div class="w-24 h-1 bg-[var(--color-accent)] mx-auto mt-4"></div>
+                    <p class="mt-8 max-w-2xl mx-auto text-lg text-[var(--color-text-muted)]">
+                        I'm always open to discussing new projects, creative ideas, or opportunities to be part of an amazing team. Feel free to reach out.
+                    </p>
+                    
+                    <!-- Calendar Booking Component -->
+                    <a href="https://cal.com/hamza-imran-xuwssj" target="_blank" rel="noopener noreferrer" class="block max-w-2xl mx-auto mt-12 group text-left interactive-glow rounded-lg">
+                        <div class="grid md:grid-cols-2 gap-8 p-6 bg-[#111] border border-[var(--color-border)] rounded-lg transition-all duration-300 group-hover:border-[var(--color-accent)] group-hover:shadow-2xl group-hover:shadow-[var(--glow-color)]">
+                            <!-- Left side: Text -->
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-4">Book a Meeting</h3>
+                                <p class="text-[var(--color-text-muted)] mb-6">
+                                    Have a project in mind or just want to chat? Pick a time that works for you.
+                                </p>
+                                <span class="inline-block px-6 py-2 bg-[var(--color-accent)] text-white font-semibold rounded-lg shadow-lg group-hover:bg-blue-600 transition-colors duration-300">
+                                    Book Now
+                                </span>
+                            </div>
+                            <!-- Right side: Calendar -->
+                            <div class="hidden md:block">
+                                 <div class="w-full rounded-lg border border-[var(--color-border)] p-3 bg-black/20">
+                                    <div class="flex items-center justify-between mb-3 px-1">
+                                        <p class="font-medium text-sm" id="calendar-month-year"></p>
+                                        <p class="text-xs text-[var(--color-text-muted)]">30 min call</p>
+                                    </div>
+                                    <div id="calendar-grid" class="grid grid-cols-7 gap-y-2 text-center text-sm">
+                                        <!-- Calendar will be populated by JavaScript -->
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="mt-12 flex justify-center items-center gap-8">
+                        <a href="mailto:hamzaimranfiverr@gmail.com" class="text-lg font-medium text-[var(--color-accent)] hover:text-white transition-colors duration-300 interactive-glow px-2 py-1 rounded-md">
+                           hamzaimranfiverr@gmail.com
+                        </a>
+                        <a href="https://www.linkedin.com/in/hamzagoatimran/" target="_blank" rel="noopener noreferrer" class="text-lg font-medium text-[var(--color-accent)] hover:text-white transition-colors duration-300 interactive-glow px-2 py-1 rounded-md">
+                           LinkedIn
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-6 border-t border-[var(--color-border)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-[var(--color-text-muted)]">
+            <p>&copy; 2025 Hamza Imran. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+
+        // --- Generative Shader Background ---
+        function initGenerativeBackground() {
+            const container = document.getElementById('hero-canvas-container');
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            container.style.position = 'fixed';
+            container.style.inset = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.zIndex = '-1';
+            container.innerHTML = '';
+            container.appendChild(renderer.domElement);
+
+            const clock = new THREE.Clock();
+
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                #ifdef GL_ES
+                    precision lowp float;
+                #endif
+                uniform float iTime;
+                uniform vec2 iResolution;
+                uniform vec3 themeColor;
+                uniform vec3 bgColor;
+                varying vec2 vUv;
+                
+                vec4 buf[8];
+                
+                vec4 sigmoid(vec4 x) { return 1. / (1. + exp(-x)); }
+                
+                vec4 cppn_fn(vec2 coordinate, float in0, float in1, float in2) {
+                    buf[6] = vec4(coordinate.x, coordinate.y, 0.3948333106474662 + in0, 0.36 + in1);
+                    buf[7] = vec4(0.14 + in2, sqrt(coordinate.x * coordinate.x + coordinate.y * coordinate.y), 0., 0.);
+                    buf[0] = mat4(vec4(6.5404263, -3.6126034, 0.7590882, -1.13613), vec4(2.4582713, 3.1660357, 1.2219609, 0.06276096), vec4(-5.478085, -6.159632, 1.8701609, -4.7742867), vec4(6.039214, -5.542865, -0.90925294, 3.251348)) * buf[6] + mat4(vec4(0.8473259, -5.722911, 3.975766, 1.6522468), vec4(-0.24321538, 0.5839259, -1.7661959, -5.350116), vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.0)) * buf[7] + vec4(0.21808943, 1.1243913, -1.7969975, 5.0294676);
+                    buf[1] = mat4(vec4(-3.3522482, -6.0612736, 0.55641043, -4.4719114), vec4(0.8631464, 1.7432913, 5.643898, 1.6106541), vec4(2.4941394, -3.5012043, 1.7184316, 6.357333), vec4(3.310376, 8.209261, 1.1355612, -1.165539)) * buf[6] + mat4(vec4(5.24046, -13.034365, 0.009859298, 15.870829), vec4(2.987511, 3.129433, -0.89023495, -1.6822904), vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.0)) * buf[7] + vec4(-5.9457836, -6.573602, -0.8812491, 1.5436668);
+                    buf[0] = sigmoid(buf[0]);
+                    buf[1] = sigmoid(buf[1]);
+                    buf[2] = mat4(vec4(-15.219568, 8.095543, -2.429353, -1.9381982), vec4(-5.951362, 4.3115187, 2.6393783, 1.274315), vec4(-7.3145227, 6.7297835, 5.2473326, 5.9411426), vec4(5.0796127, 8.979051, -1.7278991, -1.158976)) * buf[6] + mat4(vec4(-11.967154, -11.608155, 6.1486754, 11.237008), vec4(2.124141, -6.263192, -1.7050359, -0.7021966), vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.0)) * buf[7] + vec4(-4.17164, -3.2281182, -4.576417, -3.6401186);
+                    buf[3] = mat4(vec4(3.1832156, -13.738922, 1.879223, 3.233465), vec4(0.64300746, 12.768129, 1.9141049, 0.50990224), vec4(-0.049295485, 4.4807224, 1.4733979, 1.801449), vec4(5.0039253, 13.000481, 3.3991797, -4.5561905)) * buf[6] + mat4(vec4(-0.1285731, 7.720628, -3.1425676, 4.742367), vec4(0.6393625, 3.714393, -0.8108378, -0.39174938), vec4(0.0, 0.0, 0.0, 0.0), vec4(0.0, 0.0, 0.0, 0.0)) * buf[7] + vec4(-1.1811101, -21.621881, 0.7851888, 1.2329718);
+                    buf[2] = sigmoid(buf[2]);
+                    buf[3] = sigmoid(buf[3]);
+                    buf[4] = mat4(vec4(5.214916, -7.183024, 2.7228765, 2.6592617), vec4(-5.601878, -25.3591, 4.067988, 0.4602802), vec4(-10.57759, 24.286327, 21.102104, 37.546658), vec4(4.3024497, -1.9625226, 2.3458803, -1.372816)) * buf[0] + mat4(vec4(-17.6526, -10.507558, 2.2587414, 12.462782), vec4(6.265566, -502.75443, -12.642513, 0.9112289), vec4(-10.983244, 20.741234, -9.701768, -0.7635988), vec4(5.383626, 1.4819539, -4.1911616, -4.8444734)) * buf[1] + mat4(vec4(12.785233, -16.345072, -0.39901125, 1.7955981), vec4(-30.48365, -1.8345358, 1.4542528, -1.1118771), vec4(19.872723, -7.337935, -42.941723, -98.52709), vec4(8.337645, -2.7312303, -2.2927687, -36.142323)) * buf[2] + mat4(vec4(-16.298317, 3.5471997, -0.44300047, -9.444417), vec4(57.5077, -35.609753, 16.163465, -4.1534753), vec4(-0.07470326, -3.8656476, -7.0901804, 3.1523974), vec4(-12.559385, -7.077619, 1.490437, -0.8211543)) * buf[3] + vec4(-7.67914, 15.927437, 1.3207729, -1.6686112);
+                    buf[5] = mat4(vec4(-1.4109162, -0.372762, -3.770383, -21.367174), vec4(-6.2103205, -9.35908, 0.92529047, 8.82561), vec4(11.460242, -22.348068, 13.625772, -18.693201), vec4(-0.3429052, -3.9905605, -2.4626114, -0.45033523)) * buf[0] + mat4(vec4(7.3481627, -4.3661838, -6.3037653, -3.868115), vec4(1.5462853, 6.5488915, 1.9701879, -0.58291394), vec4(6.5858274, -2.2180402, 3.7127688, -1.3730392), vec4(-5.7973905, 10.134961, -2.3395722, -5.965605)) * buf[1] + mat4(vec4(-2.5132585, -6.6685553, -1.4029363, -0.16285264), vec4(-0.37908727, 0.53738135, 4.389061, -1.3024765), vec4(-0.70647055, 2.0111287, -5.1659346, -3.728635), vec4(-13.562562, 10.487719, -0.9173751, -2.6487076)) * buf[2] + mat4(vec4(-8.645013, 6.5546675, -6.3944063, -5.5933375), vec4(-0.57783127, -1.077275, 36.91025, 5.736769), vec4(14.283112, 3.7146652, 7.1452246, -4.5958776), vec4(2.7192075, 3.6021907, -4.366337, -2.3653464)) * buf[3] + vec4(-5.9000807, -4.329569, 1.2427121, 8.59503);
+                    buf[4] = sigmoid(buf[4]);
+                    buf[5] = sigmoid(buf[5]);
+                    buf[6] = mat4(vec4(-1.61102, 0.7970257, 1.4675229, 0.20917463), vec4(-28.793737, -7.1390953, 1.5025433, 4.656581), vec4(-10.94861, 39.66238, 0.74318546, -10.095605), vec4(-0.7229728, -1.5483948, 0.7301322, 2.1687684)) * buf[0] + mat4(vec4(3.2547753, 21.489103, -1.0194173, -3.3100595), vec4(-3.7316632, -3.3792162, -7.223193, -0.23685838), vec4(13.1804495, 0.7916005, 5.338587, 5.687114), vec4(-4.167605, -17.798311, -6.815736, -1.6451967)) * buf[1] + mat4(vec4(0.604885, -7.800309, -7.213122, -2.741014), vec4(-3.522382, -0.12359311, -0.5258442, 0.43852118), vec4(9.6752825, -22.853785, 2.062431, 0.099892326), vec4(-4.3196306, -17.730087, 2.5184598, 5.30267)) * buf[2] + mat4(vec4(-6.545563, -15.790176, -6.0438633, -5.415399), vec4(-43.591583, 28.551912, -16.00161, 18.84728), vec4(4.212382, 8.394307, 3.0958717, 8.657522), vec4(-5.0237565, -4.450633, -4.4768, -5.5010443)) * buf[3] + mat4(vec4(1.6985557, -67.05806, 6.897715, 1.9004834), vec4(1.8680354, 2.3915145, 2.5231109, 4.081538), vec4(11.158006, 1.7294737, 2.0738268, 7.386411), vec4(-4.256034, -306.24686, 8.258898, -17.132736)) * buf[4] + mat4(vec4(1.6889864, -4.5852966, 3.8534803, -6.3482175), vec4(1.3543309, -1.2640043, 9.932754, 2.9079645), vec4(-5.2770967, 0.07150358, -0.13962056, 3.3269649), vec4(28.34703, -4.918278, 6.1044083, 4.085355)) * buf[5] + vec4(6.6818056, 12.522166, -3.7075126, -4.104386);
+                    buf[7] = mat4(vec4(-8.265602, -4.7027016, 5.098234, 0.7509808), vec4(8.6507845, -17.15949, 16.51939, -8.884479), vec4(-4.036479, -2.3946867, -2.6055532, -1.9866527), vec4(-2.2167742, -1.8135649, -5.9759874, 4.8846445)) * buf[0] + mat4(vec4(6.7790847, 3.5076547, -2.8191125, -2.7028968), vec4(-5.743024, -0.27844876, 1.4958696, -5.0517144), vec4(13.122226, 15.735168, -2.9397483, -4.101023), vec4(-14.375265, -5.030483, -6.2599335, 2.9848232)) * buf[1] + mat4(vec4(4.0950394, -0.94011575, -5.674733, 4.755022), vec4(4.3809423, 4.8310084, 1.7425908, -3.437416), vec4(2.117492, 0.16342592, -104.56341, 16.949184), vec4(-5.22543, -2.994248, 3.8350096, -1.9364246)) * buf[2] + mat4(vec4(-5.900337, 1.7946124, -13.604192, -3.8060522), vec4(6.6583457, 31.911177, 25.164474, 91.81147), vec4(11.840538, 4.1503043, -0.7314397, 6.768467), vec4(-6.3967767, 4.034772, 6.1714606, -0.32874924)) * buf[3] + mat4(vec4(3.4992442, -196.91893, -8.923708, 2.8142626), vec4(3.4806502, -3.1846354, 5.1725626, 5.1804223), vec4(-2.4009497, 15.585794, 1.2863957, 2.0252278), vec4(-71.25271, -62.441242, -8.138444, 0.50670296)) * buf[4] + mat4(vec4(-12.291733, -11.176166, -7.3474145, 4.390294), vec4(10.805477, 5.6337385, -0.9385842, -4.7348723), vec4(-12.869276, -7.039391, 5.3029537, 7.5436664), vec4(1.4593618, 8.91898, 3.5101583, 5.840625)) * buf[5] + vec4(2.2415268, -6.705987, -0.98861027, -2.117676);
+                    buf[6] = sigmoid(buf[6]);
+                    buf[7] = sigmoid(buf[7]);
+                    buf[0] = mat4(vec4(1.6794263, 1.3817469, 2.9625452, 0.0), vec4(-1.8834411, -1.4806935, -3.5924516, 0.0), vec4(-1.3279216, -1.0918057, -2.3124623, 0.0), vec4(0.2662234, 0.23235129, 0.44178495, 0.0)) * buf[0] + mat4(vec4(-0.6299101, -0.5945583, -0.9125601, 0.0), vec4(0.17828953, 0.18300213, 0.18182953, 0.0), vec4(-2.96544, -2.5819945, -4.9001055, 0.0), vec4(1.4195864, 1.1868085, 2.5176322, 0.0)) * buf[1] + mat4(vec4(-1.2584374, -1.0552157, -2.1688404, 0.0), vec4(-0.7200217, -0.52666044, -1.438251, 0.0), vec4(0.15345335, 0.15196142, 0.272854, 0.0), vec4(0.945728, 0.8861938, 1.2766753, 0.0)) * buf[2] + mat4(vec4(-2.4218085, -1.968602, -4.35166, 0.0), vec4(-22.683098, -18.0544, -41.954372, 0.0), vec4(0.63792, 0.5470648, 1.1078634, 0.0), vec4(-1.5489894, -1.3075932, -2.6444845, 0.0)) * buf[3] + mat4(vec4(-0.49252132, -0.39877754, -0.91366625, 0.0), vec4(0.95609266, 0.7923952, 1.640221, 0.0), vec4(0.30616966, 0.15693925, 0.8639857, 0.0), vec4(1.1825981, 0.94504964, 2.176963, 0.0)) * buf[4] + mat4(vec4(0.35446745, 0.3293795, 0.59547555, 0.0), vec4(-0.58784515, -0.48177817, -1.0614829, 0.0), vec4(2.5271258, 1.9991658, 4.6846647, 0.0), vec4(0.13042648, 0.08864098, 0.30187556, 0.0)) * buf[5] + mat4(vec4(-1.7718065, -1.4033192, -3.3355875, 0.0), vec4(3.1664357, 2.638297, 5.378702, 0.0), vec4(-3.1724713, -2.6107926, -5.549295, 0.0), vec4(-2.851368, -2.249092, -5.3013067, 0.0)) * buf[6] + mat4(vec4(1.5203838, 1.2212278, 2.8404984, 0.0), vec4(1.5210563, 1.2651345, 2.683903, 0.0), vec4(2.9789467, 2.4364579, 5.2347264, 0.0), vec4(2.2270417, 1.8825914, 3.8028636, 0.0)) * buf[7] + vec4(-1.5468478, -3.6171484, 0.24762098, 0.0);
+                    buf[0] = sigmoid(buf[0]);
+                    return vec4(buf[0].x, buf[0].y, buf[0].z, 1.0);
+                }
+                
+                void main() {
+                    vec2 uv = vUv * 2.0 - 1.0; 
+                    uv.y *= -1.0;
+
+                    vec4 generated = cppn_fn(uv, 0.1 * sin(0.3 * iTime), 0.1 * sin(0.69 * iTime), 0.1 * sin(0.44 * iTime));
+                    
+                    // Calculate luminance to get the pattern's brightness
+                    float luminance = dot(generated.rgb, vec3(0.299, 0.587, 0.114));
+                    
+                    // Create a monochrome blue version of the pattern
+                    vec3 patternColor = themeColor * luminance;
+                    
+                    // Mix it with the background to make it muted and subtle
+                    vec3 finalColor = mix(bgColor, patternColor, 0.9); 
+
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const material = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms: {
+                    iTime: { value: 0 },
+                    iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                    themeColor: { value: new THREE.Color(0x007aff) },
+                    bgColor: { value: new THREE.Color(0x0a0a0a) }
+                }
+            });
+
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            const mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            function onResize() {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                material.uniforms.iResolution.value.set(
+                    window.innerWidth, 
+                    window.innerHeight
+                );
+            }
+            window.addEventListener('resize', onResize);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                material.uniforms.iTime.value = clock.getElapsedTime();
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        }
+        initGenerativeBackground();
+
+        // --- Animated Text Initialization ---
+        function initAnimatedText() {
+            const animatedHeadings = document.querySelectorAll('.animated-heading');
+            animatedHeadings.forEach(heading => {
+                if (heading.dataset.animated) return;
+                heading.dataset.animated = "true";
+
+                const text = heading.textContent.trim();
+                if (!text) return;
+
+                heading.innerHTML = ''; 
+
+                const duration = heading.dataset.duration || 1.5;
+                const delayMultiplier = heading.dataset.delayMultiplier || 0.08;
+
+                heading.style.setProperty('--duration', `${duration}s`);
+
+                const characters = text.split('');
+                const numLetters = characters.length;
+                
+                characters.forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.innerHTML = char === ' ' ? '&nbsp;' : char;
+                    const mappedIndex = i - numLetters / 2;
+                    span.style.animationDelay = `${mappedIndex * delayMultiplier}s`;
+                    heading.appendChild(span);
+                });
+            });
+        }
+        initAnimatedText();
+
+        // --- Intersection Observer for scroll animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // --- Experience Card Glow Effect ---
+        document.querySelectorAll('.experience-card').forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // --- Interactive Glow Effect for Buttons/Links ---
+        document.querySelectorAll('.interactive-glow').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                el.style.setProperty('--mouse-x', `${x}px`);
+                el.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // --- Tubelight Navigation ---
+        function initTubelightNav() {
+            const navContainer = document.getElementById('tubelight-nav');
+            if (!navContainer) return;
+
+            const nav = navContainer.querySelector('div');
+            const links = nav.querySelectorAll('.nav-item');
+            const lamp = document.getElementById('nav-lamp');
+
+            function positionLampUnder(targetLink) {
+                if (!targetLink || !nav) return;
+                const linkRect = targetLink.getBoundingClientRect();
+                const navRect = nav.getBoundingClientRect();
+                const left = linkRect.left - navRect.left + nav.scrollLeft;
+                
+                lamp.style.width = `${linkRect.width}px`;
+                lamp.style.left = `${left}px`;
+            }
+
+            links.forEach(link => {
+                link.addEventListener('mouseenter', () => {
+                    positionLampUnder(link);
+                });
+            });
+
+            nav.addEventListener('mouseenter', () => {
+                lamp.style.opacity = '1';
+            });
+
+            nav.addEventListener('mouseleave', () => {
+                lamp.style.opacity = '0';
+            });
+        }
+        initTubelightNav();
+
+        // --- Custom Inverted Cursor ---
+        function initCustomCursor() {
+            const cursor = document.getElementById('custom-cursor');
+            if (!cursor) return;
+
+            let visible = false;
+
+            // Apply position directly for 1:1 tracking (no lag)
+            const handleMouseMove = (e) => {
+                if (!visible) {
+                    visible = true;
+                    cursor.style.opacity = '1';
+                }
+                cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            };
+
+            const handleMouseLeave = () => {
+                visible = false;
+                cursor.style.opacity = '0';
+            };
+            
+            const handleMouseEnter = (e) => {
+                if (!visible) {
+                    visible = true;
+                    cursor.style.opacity = '1';
+                    // Snap to position on re-enter to avoid lag from off-screen
+                    cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+                }
+            };
+            
+            document.body.style.cursor = "none"; // Hide native cursor
+
+            // Setup main mouse listeners
+            document.addEventListener("mousemove", handleMouseMove);
+            document.documentElement.addEventListener("mouseenter", handleMouseEnter);
+            document.documentElement.addEventListener("mouseleave", handleMouseLeave);
+            
+            // Logic to toggle inverting effect based on hovering text-like elements
+            const textElements = document.querySelectorAll("p, h1, h2, h3, h4, h5, h6, a, li, span, button");
+            
+            const onEnterText = () => cursor.classList.add('invert-cursor');
+            const onLeaveText = () => cursor.classList.remove('invert-cursor');
+
+            textElements.forEach(el => {
+              el.addEventListener("mouseenter", onEnterText);
+              el.addEventListener("mouseleave", onLeaveText);
+            });
+        }
+        initCustomCursor();
+
+
+        // --- Smooth Scrolling ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#' || !targetId) return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset;
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // --- Calendar Generation ---
+        function generateCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const monthYearEl = document.getElementById('calendar-month-year');
+            if (!calendarGrid || !monthYearEl) return;
+
+            const dayNames = ["S", "M", "T", "W", "T", "F", "S"];
+            const now = new Date();
+            const month = now.getMonth();
+            const year = now.getFullYear();
+
+            monthYearEl.textContent = `${now.toLocaleString('default', { month: 'long' })}, ${year}`;
+
+            calendarGrid.innerHTML = '';
+
+            dayNames.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'font-bold text-xs text-[var(--color-text-muted)]';
+                dayEl.textContent = day;
+                calendarGrid.appendChild(dayEl);
+            });
+            
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                const emptyCell = document.createElement('div');
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'h-7 w-7 flex items-center justify-center rounded-full';
+                dayCell.textContent = day;
+
+                if (Math.random() < 0.25) {
+                    dayCell.classList.add('bg-[var(--color-accent)]', 'text-white', 'font-semibold');
+                } else {
+                    dayCell.classList.add('text-[var(--color-text-muted)]');
+                }
+
+                calendarGrid.appendChild(dayCell);
+            }
+        }
+        generateCalendar();
+
+        // --- Past Work Carousel ---
+        function initCarousel() {
+            const items = [
+              { id: 1, url: 'https://drive.google.com/file/d/1SY2xp7YJ1HugAsg_IrW4XEUwnuL7UMSA/view?usp=sharing', title: 'Black Toyota Supra' },
+              { id: 2, url: 'https://storage.googleapis.com/aide-user-images/c7f9dc6e-a9d9-4b13-81b4-25e865f3a097.jpeg', title: 'Mapping Journeys' },
+              { id: 3, url: 'https://storage.googleapis.com/aide-user-images/916d7a42-706f-4740-9706-96a1a1f49630.jpeg', title: 'Focused Training' },
+              { id: 4, url: 'https://storage.googleapis.com/aide-user-images/409a25b2-3837-43ca-a6d1-008298da5545.jpeg', title: 'Airplane Above Architecture' },
+              { id: 5, url: 'https://storage.googleapis.com/aide-user-images/fd3bf45d-7ac3-4a11-a8ac-896898d2279b.jpeg', title: 'City Sunset with Fountain' },
+              { id: 6, url: 'https://drive.google.com/file/d/1H15bniKKWchDHS69uB7M-1U-079biNUb/view', title: 'Twilight Lamppost' },
+            ];
+            
+            const AUTOPLAY_INTERVAL = 5000; // 5 seconds
+            const playIcon = `<svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4.018 14.385V5.615a.8.8 0 011.23-.655l7.98 4.385a.8.8 0 010 1.31l-7.98 4.385a.8.8 0 01-1.23-.655z"></path></svg>`;
+            const pauseIcon = `<svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 4h3a1 1 0 011 1v10a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1zm7 0h3a1 1 0 011 1v10a1 1 0 01-1 1h-3a1 1 0 01-1-1V5a1 1 0 011-1z" clip-rule="evenodd"></path></svg>`;
+
+            const container = document.getElementById('carousel-container');
+            const track = document.getElementById('carousel-track');
+            const dotsContainer = document.getElementById('carousel-dots');
+            const prevButton = document.getElementById('carousel-prev');
+            const nextButton = document.getElementById('carousel-next');
+            const playPauseButton = document.getElementById('carousel-play-pause');
+            
+            if (!container || !track || !dotsContainer || !prevButton || !nextButton || !playPauseButton) return;
+
+            let currentIndex = 0;
+            let isPlaying = true;
+            let autoplayInterval = null;
+            let dots = [];
+
+            function updateCarouselUI() {
+                const containerWidth = container.offsetWidth;
+                track.style.transform = `translateX(-${currentIndex * containerWidth}px)`;
+
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+
+                playPauseButton.innerHTML = isPlaying ? pauseIcon : playIcon;
+                playPauseButton.setAttribute('aria-label', isPlaying ? 'Pause autoplay' : 'Play autoplay');
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateCarouselUI();
+            }
+
+            function nextSlide() {
+                currentIndex = (currentIndex + 1) % items.length;
+                updateCarouselUI();
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                updateCarouselUI();
+            }
+
+            function startAutoplay() {
+                if(isPlaying) {
+                   clearInterval(autoplayInterval);
+                   autoplayInterval = setInterval(nextSlide, AUTOPLAY_INTERVAL);
+                }
+            }
+            
+            function stopAutoplay() {
+                clearInterval(autoplayInterval);
+            }
+            
+            function toggleAutoplay() {
+                isPlaying = !isPlaying;
+                if(isPlaying) {
+                    startAutoplay();
+                } else {
+                    stopAutoplay();
+                }
+                updateCarouselUI();
+            }
+            
+            function resetAutoplay() {
+                if (isPlaying) {
+                    stopAutoplay();
+                    startAutoplay();
+                }
+            }
+            
+            // Generate slides and dots
+            track.innerHTML = items.map(item => `
+                <div class="shrink-0 w-full h-full">
+                    <img src="${item.url}" alt="${item.title}" class="w-full h-full object-cover select-none pointer-events-none" draggable="false" />
+                </div>
+            `).join('');
+
+            dotsContainer.innerHTML = items.map((_, i) => `
+                <button data-index="${i}" class="carousel-dot" aria-label="Go to slide ${i + 1}"></button>
+            `).join('');
+            
+            dots = Array.from(dotsContainer.querySelectorAll('.carousel-dot'));
+
+            // Setup Event Listeners
+            prevButton.addEventListener('click', () => {
+                prevSlide();
+                resetAutoplay();
+            });
+
+            nextButton.addEventListener('click', () => {
+                nextSlide();
+                resetAutoplay();
+            });
+            
+            playPauseButton.addEventListener('click', toggleAutoplay);
+            
+            container.addEventListener('mouseenter', stopAutoplay);
+            container.addEventListener('mouseleave', startAutoplay);
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    goToSlide(parseInt(dot.dataset.index));
+                    resetAutoplay();
+                });
+            });
+
+            window.addEventListener('resize', updateCarouselUI);
+
+            // Initial setup
+            updateCarouselUI();
+            startAutoplay();
+        }
+        initCarousel();
+
+    </script>
+</body>
+</html>
