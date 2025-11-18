@@ -275,15 +275,16 @@ function generateCalendar() {
 
 // --- Past Work Carousel ---
 function initCarousel() {
-    // Using Raw GitHub User Content links to ensure images display correctly on all deployments
+    // Using relative paths for images. 
+    // Vercel serves contents of the 'public' folder at the root.
     const items = [
-      { id: 1, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/1201(2).jpeg', title: 'Urban Perspective' },
-      { id: 2, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/1201.jpg', title: 'Street Vibes' },
-      { id: 3, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/IMG_4475.jpeg', title: 'Automotive Depth' },
-      { id: 4, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/IMG_4493.jpeg', title: 'Night Scene' },
-      { id: 5, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/IMG_7595.jpeg', title: 'Toyota Supra Detail' },
-      { id: 6, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/IMG_8435.jpeg', title: 'Classic Lines' },
-      { id: 7, url: 'https://raw.githubusercontent.com/hamzaimranz0/Portfolio/main/public/IMG_9640.jpeg', title: 'Modern Architecture' },
+      { id: 1, url: '1201(2).jpeg', title: 'Urban Perspective' },
+      { id: 2, url: '1201.jpg', title: 'Street Vibes' },
+      { id: 3, url: 'IMG_4475.jpeg', title: 'Automotive Depth' },
+      { id: 4, url: 'IMG_4493.jpeg', title: 'Night Scene' },
+      { id: 5, url: 'IMG_7595.jpeg', title: 'Toyota Supra Detail' },
+      { id: 6, url: 'IMG_8435.jpeg', title: 'Classic Lines' },
+      { id: 7, url: 'IMG_9640.jpeg', title: 'Modern Architecture' },
     ];
     
     const AUTOPLAY_INTERVAL = 5000; // 5 seconds
