@@ -1,5 +1,3 @@
-
-
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
 // --- Generative Shader Background ---
@@ -9,16 +7,11 @@ function initGenerativeBackground() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     
-    container.style.position = 'fixed';
-    container.style.inset = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.zIndex = '-1';
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
@@ -126,9 +119,7 @@ function initGenerativeBackground() {
 function initAnimatedText() {
     const animatedHeadings = document.querySelectorAll('.animated-heading');
     animatedHeadings.forEach(heading => {
-        // FIX: Cast heading to HTMLElement to access dataset property.
         if ((heading as HTMLElement).dataset.animated) return;
-        // FIX: Cast heading to HTMLElement to access dataset property.
         (heading as HTMLElement).dataset.animated = "true";
 
         const text = heading.textContent.trim();
@@ -136,14 +127,9 @@ function initAnimatedText() {
 
         heading.innerHTML = ''; 
 
-        // FIX: Cast heading to HTMLElement to access dataset property.
-        // FIX: Ensure dataset properties used in arithmetic are converted to numbers.
         const duration = Number((heading as HTMLElement).dataset.duration) || 1.5;
-        // FIX: Cast heading to HTMLElement to access dataset property.
-        // FIX: Ensure dataset properties used in arithmetic are converted to numbers.
         const delayMultiplier = Number((heading as HTMLElement).dataset.delayMultiplier) || 0.08;
 
-        // FIX: Cast heading to HTMLElement to access style property.
         (heading as HTMLElement).style.setProperty('--duration', `${duration}s`);
 
         const characters = text.split('');
@@ -275,8 +261,6 @@ function generateCalendar() {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.className = 'h-7 w-7 flex items-center justify-center rounded-full';
-        // FIX: The `day` variable is a number, but `textContent` expects a string.
-        // This was likely the cause of the "Type 'number' is not assignable to type 'string'" error.
         dayCell.textContent = String(day);
 
         if (Math.random() < 0.25) {
@@ -407,8 +391,6 @@ function initCarousel() {
 
     dots.forEach(dot => {
         dot.addEventListener('click', () => {
-            // FIX: Cast `dot` to `HTMLElement` to access `dataset`. The reported error "Type 'number' is not assignable to type 'string'" is likely a misleading secondary error due to `dataset` not existing on `Element`. Using `?? '0'` for safety.
-            // FIX: Add radix to parseInt for robustness.
             goToSlide(parseInt((dot as HTMLElement).dataset.index ?? '0', 10));
             resetAutoplay();
         });
@@ -441,12 +423,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Experience Card Glow Effect ---
     document.querySelectorAll('.experience-card').forEach(card => {
-        // FIX: Type the event `e` as `MouseEvent` to access `clientX` and `clientY`.
         card.addEventListener('mousemove', (e: MouseEvent) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            // FIX: Cast `card` to `HTMLElement` to access the `style` property.
             (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
             (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
         });
@@ -454,12 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Interactive Glow Effect for Buttons/Links ---
     document.querySelectorAll('.interactive-glow').forEach(el => {
-        // FIX: Type the event `e` as `MouseEvent` to access `clientX` and `clientY`.
         el.addEventListener('mousemove', (e: MouseEvent) => {
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            // FIX: Cast `el` to `HTMLElement` to access the `style` property.
             (el as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
             (el as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
         });

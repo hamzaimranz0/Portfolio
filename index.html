@@ -23,13 +23,24 @@
 
         html {
             scroll-behavior: smooth;
+            background-color: var(--color-bg); /* Fallback background color */
         }
 
         body {
-            /* The background is rendered by the Three.js canvas */
+            /* Ensure body is transparent so the fixed canvas behind it is visible */
+            background-color: transparent;
             color: var(--color-text);
             font-family: 'Manrope', sans-serif;
             overflow-x: hidden;
+        }
+
+        /* Canvas Container Styles */
+        #hero-canvas-container {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Behind the noise layer */
         }
 
         /* Hide native cursor for a custom experience */
@@ -46,7 +57,7 @@
             height: 100vh;
             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+DQogIDxmaWx0ZXIgaWQ9Im4iPg0KICAgIDxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIuOCIgbnVtT2N0YXZlcz0iNSIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPg0KICA8L2ZpbHRlcj4NCiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIwLjAzIi8+DQo8L3N2Zz4=');
             opacity: 0.5;
-            z-index: -1;
+            z-index: -1; /* On top of canvas (-2), behind content */
         }
 
         .text-glow {
