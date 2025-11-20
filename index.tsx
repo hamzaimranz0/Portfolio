@@ -1,3 +1,5 @@
+
+
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
 // --- Generative Shader Background ---
@@ -290,12 +292,12 @@ function generateCalendar() {
 // --- Past Work Carousel ---
 function initCarousel() {
     const items = [
-      { id: 1, url: '/images/black-toyota-supra.jpg', title: 'Black Toyota Supra' },
-      { id: 2, url: '/images/mapping-journeys.jpg', title: 'Mapping Journeys' },
-      { id: 3, url: '/images/focused-training.jpg', title: 'Focused Training' },
-      { id: 4, url: '/images/airplane-above-architecture.jpg', title: 'Airplane Above Architecture' },
-      { id: 5, url: '/images/city-sunset-with-fountain.jpg', title: 'City Sunset with Fountain' },
-      { id: 6, url: '/images/twilight-lamppost.jpg', title: 'Twilight Lamppost' },
+      { id: 1, url: 'https://drive.google.com/uc?id=1SY2xp7YJ1HugAsg_IrW4XEUwnuL7UMSA', title: 'Black Toyota Supra' },
+      { id: 2, url: 'https://storage.googleapis.com/aide-user-images/c7f9dc6e-a9d9-4b13-81b4-25e865f3a097.jpeg', title: 'Mapping Journeys' },
+      { id: 3, url: 'https://storage.googleapis.com/aide-user-images/916d7a42-706f-4740-9706-96a1a1f49630.jpeg', title: 'Focused Training' },
+      { id: 4, url: 'https://storage.googleapis.com/aide-user-images/409a25b2-3837-43ca-a6d1-008298da5545.jpeg', title: 'Airplane Above Architecture' },
+      { id: 5, url: 'https://storage.googleapis.com/aide-user-images/fd3bf45d-7ac3-4a11-a8ac-896898d2279b.jpeg', title: 'City Sunset with Fountain' },
+      { id: 6, url: 'https://drive.google.com/uc?id=1H15bniKKWchDHS69uB7M-1U-079biNUb', title: 'Twilight Lamppost' },
     ];
     
     const AUTOPLAY_INTERVAL = 5000; // 5 seconds
