@@ -124,7 +124,9 @@ function initGenerativeBackground() {
 function initAnimatedText() {
     const animatedHeadings = document.querySelectorAll('.animated-heading');
     animatedHeadings.forEach(heading => {
+        // FIX: Cast heading to HTMLElement to access dataset property.
         if ((heading as HTMLElement).dataset.animated) return;
+        // FIX: Cast heading to HTMLElement to access dataset property.
         (heading as HTMLElement).dataset.animated = "true";
 
         const text = heading.textContent.trim();
@@ -132,9 +134,14 @@ function initAnimatedText() {
 
         heading.innerHTML = ''; 
 
+        // FIX: Cast heading to HTMLElement to access dataset property.
+        // FIX: Ensure dataset properties used in arithmetic are converted to numbers.
         const duration = Number((heading as HTMLElement).dataset.duration) || 1.5;
+        // FIX: Cast heading to HTMLElement to access dataset property.
+        // FIX: Ensure dataset properties used in arithmetic are converted to numbers.
         const delayMultiplier = Number((heading as HTMLElement).dataset.delayMultiplier) || 0.08;
 
+        // FIX: Cast heading to HTMLElement to access style property.
         (heading as HTMLElement).style.setProperty('--duration', `${duration}s`);
 
         const characters = text.split('');
@@ -266,6 +273,8 @@ function generateCalendar() {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayCell = document.createElement('div');
         dayCell.className = 'h-7 w-7 flex items-center justify-center rounded-full';
+        // FIX: The `day` variable is a number, but `textContent` expects a string.
+        // This was likely the cause of the "Type 'number' is not assignable to type 'string'" error.
         dayCell.textContent = String(day);
 
         if (Math.random() < 0.25) {
@@ -280,29 +289,13 @@ function generateCalendar() {
 
 // --- Past Work Carousel ---
 function initCarousel() {
-    /**
-     * CONFIGURATION NOTE:
-     * For Vercel deployments, creating a 'public' folder at the root and placing an 'images' folder inside it is best practice.
-     * 
-     * File System Structure:
-     * /public
-     *   /images
-     *     /1201.jpg
-     *     /1201(2).jpeg
-     *     ...
-     * 
-     * URL Reference:
-     * Vercel serves the 'public' folder as the root. So the URL remains '/images/filename.jpg'.
-     * Note: File names are case-sensitive on the server (e.g., .jpg is different from .JPG).
-     */
     const items = [
-      { id: 1, url: '/images/1201.jpg', title: 'Portfolio Highlight' },
-      { id: 2, url: '/images/1201(2).jpeg', title: 'Portfolio Highlight' },
-      { id: 3, url: '/images/IMG_4475.jpeg', title: 'Portfolio Highlight' },
-      { id: 4, url: '/images/IMG_4493.jpeg', title: 'Portfolio Highlight' },
-      { id: 5, url: '/images/IMG_7595.jpeg', title: 'Portfolio Highlight' },
-      { id: 6, url: '/images/IMG_8435.jpeg', title: 'Portfolio Highlight' },
-      { id: 7, url: '/images/IMG_9640.jpeg', title: 'Portfolio Highlight' },
+      { id: 1, url: '/images/black-toyota-supra.jpg', title: 'Black Toyota Supra' },
+      { id: 2, url: '/images/mapping-journeys.jpg', title: 'Mapping Journeys' },
+      { id: 3, url: '/images/focused-training.jpg', title: 'Focused Training' },
+      { id: 4, url: '/images/airplane-above-architecture.jpg', title: 'Airplane Above Architecture' },
+      { id: 5, url: '/images/city-sunset-with-fountain.jpg', title: 'City Sunset with Fountain' },
+      { id: 6, url: '/images/twilight-lamppost.jpg', title: 'Twilight Lamppost' },
     ];
     
     const AUTOPLAY_INTERVAL = 5000; // 5 seconds
@@ -412,6 +405,8 @@ function initCarousel() {
 
     dots.forEach(dot => {
         dot.addEventListener('click', () => {
+            // FIX: Cast `dot` to `HTMLElement` to access `dataset`. The reported error "Type 'number' is not assignable to type 'string'" is likely a misleading secondary error due to `dataset` not existing on `Element`. Using `?? '0'` for safety.
+            // FIX: Add radix to parseInt for robustness.
             goToSlide(parseInt((dot as HTMLElement).dataset.index ?? '0', 10));
             resetAutoplay();
         });
@@ -444,10 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Experience Card Glow Effect ---
     document.querySelectorAll('.experience-card').forEach(card => {
+        // FIX: Type the event `e` as `MouseEvent` to access `clientX` and `clientY`.
         card.addEventListener('mousemove', (e: MouseEvent) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+            // FIX: Cast `card` to `HTMLElement` to access the `style` property.
             (card as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
             (card as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
         });
@@ -455,10 +452,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Interactive Glow Effect for Buttons/Links ---
     document.querySelectorAll('.interactive-glow').forEach(el => {
+        // FIX: Type the event `e` as `MouseEvent` to access `clientX` and `clientY`.
         el.addEventListener('mousemove', (e: MouseEvent) => {
             const rect = el.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+            // FIX: Cast `el` to `HTMLElement` to access the `style` property.
             (el as HTMLElement).style.setProperty('--mouse-x', `${x}px`);
             (el as HTMLElement).style.setProperty('--mouse-y', `${y}px`);
         });
